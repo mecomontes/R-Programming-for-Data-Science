@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1584920247609.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "630700962",
+    "id" : "AED04EF1",
+    "lastKnownWriteTime" : 1584909714,
+    "last_content_update" : 1584909714,
+    "path" : "~/Desktop/DESARROLLO/RStudio/IntroDS/.Rhistory",
+    "project_path" : ".Rhistory",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_history"
+}

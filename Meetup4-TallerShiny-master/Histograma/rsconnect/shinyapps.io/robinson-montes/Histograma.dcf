@@ -1,0 +1,12 @@
+name: Histograma
+title: Histograma
+username:
+account: robinson-montes
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2645039
+bundleId: 3480388
+url: https://robinson-montes.shinyapps.io/Histograma/
+when: 1596675553.83677
+asMultiple: FALSE
+asStatic: FALSE

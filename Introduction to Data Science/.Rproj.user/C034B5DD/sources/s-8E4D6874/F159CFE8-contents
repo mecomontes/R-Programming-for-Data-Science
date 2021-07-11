@@ -1,0 +1,142 @@
+pi^3
+3+4-5*6
+var <- 3-4
+5:12
+seq(from = 0, to = 10, by = 2)
+seq(from = 0, by = 3, length.out = 7)
+rep(x = 5, times = 6)
+runif(n = 10, min = 1, max = 5)#genera números aleatorios uniformes
+rnorm(n = 10, mean = 100, sd = 10)#genera aleatorios con distribución normal
+round(2.987654345678 , 2)#redondea el número a 2 decimales
+a <- 5
+5 -> b
+c = 4
+global_1 <<- 5 # variable global
+6 ->> global_2 # variable global
+
+install.packages('openxlsx')
+install.packages('tidyverse')
+install.packages('magrittr')
+install.packages('fdth')
+install.packages('prettyR')
+install.packages('modeest')
+
+library(readr)
+Data_Banco <- read_csv("Data/Data_Banco.csv", 
+                       col_types = cols(Cajero = col_integer(), 
+                       ID_Transaccion = col_integer(), Monto = col_integer(), 
+                       Sucursal = col_character(), Tiempo_Servicio_seg = col_integer()))
+View(Data_Banco)
+
+#ccargar lireria a utilizar
+library(readxl)
+#leer el archivo de excel
+data_banco <- read_excel("Data/Data_Banco.xlsx", sheet = "Data")
+data_sucursal <-read_excel("Data/Data_Banco.xlsx", sheet = 'Data_Sucursal')
+View(Data_Banco)
+
+x <- c(11,12,13,14,16,28) #Crear vectores 
+y <-  rep(x , times = 5) #repetir los valores de x
+x
+y
+
+#Crear un data frame
+df1 <- data.frame(Nombre = c('Ana', 'Pedro', 'Juan'), 
+                  Edad = c(20, 15, 32), 
+                  Ciudad = factor(c('Gye', 'Uio', 'Cue')))
+df1
+
+#dar nombre a las filas
+rownames(df1) <- paste('id_',1:3,sep = '')
+df1
+
+#Cambiar nombre de las columnas
+names(df1) <- c('Name', 'Age', 'City')
+df1
+
+head(df1, n = 2)
+df1
+tail(df1, n = 1)
+
+str(df1) #Permite ver la estructura de cualquier objeto en R
+
+#CRear listas
+lista <- list(A = c(1,2), B = matrix(1:6, nrow = 3))
+lista
+lista$B
+
+#Fechas
+fecha <- lubridate::ymd('2019-12-13') #lubridate es la librería
+serietiempo = ts(1:24, start = 2014) #serie de tiempo
+serietiempo
+
+library(tidyverse)
+parse_number(c('$1,234.5','$12.45'))
+
+#Manipulacioin de datos
+str(data_banco)
+library(tidyverse)
+#Tibbles es una mejor forma de mostrar el data frame
+data_banco <- tbl_df(data_banco)
+data_banco
+
+library(dplyr)
+select(data_banco, Transaccion, Tiempo_Servicio_seg)
+
+data_banco <- Data_Banco
+library(magrittr)
+#obtener los nombres del data frame
+names(data_banco) ## BAse
+data_banco %>% names ## Pipe %>% crtl + shift + n
+length(names(data_banco)) #BAse
+data_banco %>% names %>% length
+data_banco %>% select(Transaccion, Tiempo_Servicio_seg)
+data_banco[,c('Transaccion', 'Tiempo_Servicio_seg')]
+
+# Construir un grafico boxplot con esos datos
+data_banco %>% select(Tiempo_Servicio_seg) %>% boxplot 
+data_banco %$% fivenum(Tiempo_Servicio_seg, na.rm = TRUE)
+data_banco %>% select(Transaccion, Tiempo_Servicio_seg) %>% View
+
+#Seleccionar todas las columnas cuyo nombre contenga el texto Tra
+data_banco %>% select(contains('Tra')) %>% View
+#Seleccionar todas las columnas cuyo nombre inicie con S
+data_banco %>% select(starts_with('S')) %>% View
+#Seleccionar todas las columnas cuyo nombre finalice con on
+data_banco %>% select(ends_with('on')) %>% View
+#Seleccionar todas las columnas cuyo nombre contenga r seguido por un sa
+data_banco %>% select(matches('r?sa')) %>% View
+#quitar variables del data frmame
+data_banco %>% select(-Cajero, -Tiempo_Servicio_seg) %>% names
+
+#filtrar las filas correspondientes a la sucursal 62
+data_banco %>% filter(Sucursal == 62) %>% View
+#filtrar las filas correspondientes a la sucursal 62 y hayan durado mas de 120 segundos
+data_banco %>% filter(Sucursal == 62 & Tiempo_Servicio_seg > 120) %>% View
+#filtrar las filas correspondientes a la sucursal 62 y hayan durado mas de 120 segundos y su evaluacio fue buena
+data_banco %>% filter(Sucursal == 62 & Tiempo_Servicio_seg > 120 & Satisfaccion == 'Muy Bueno') %>% View
+
+#Filtrar las filas correspondientes a la sucursal 85 y calcular la correlacion entre Tiempo_servicio y Monto
+data_banco %>% #Operador Pipe total
+  filter(Sucursal == 85) %$% #Operador Pipe para seleccion de columna
+  cor(Tiempo_Servicio_seg, as.numeric(Monto))
+
+#Ordenar la dat apor satisfaccion
+data_banco %>% arrange(Satisfaccion) %>% View
+#Ordenar la transaccion, y dentro de cada transacion de mayor a menor por tiempo de servici
+data_banco %>% arrange( Transaccion, desc(Tiempo_Servicio_seg)) %>% View
+
+#Crear nueva columna con el tiempo en miinutos
+data_banco <- data_banco %>% mutate(Tiempo_Servicio_Min = Tiempo_Servicio_seg/60) %>% View
+# Otra opocion pero me borra data_banco
+data_banco %<>% mutate(Tiempo_Servicio_Min = Tiempo_Servicio_seg/60) %>% View
+
+#Reemplazar comas por puntos para que todos los datos sean iguales
+data_banco <- data_banco %>% mutate(Monto = str_replace(Monto, pattern = ',', replacement = '.')) %>%
+  mutate(Sucursal = as.character(Sucursal), Cajero = as.character(Cajero),
+         Satisfaccion = parse_factor(Satisfaccion, levels = c('Muy Malo', 'Malo', 
+                                                              'Regular', 'Bueno', 'Muy Bueno')),
+         Monto = parse_number(Monto, locate = locate(decimal_mark = '.')))
+
+data_banco$Monto %>% View
+mean(data_banco$Monto)
